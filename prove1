@@ -1,0 +1,72 @@
+#worked on this with mikaela
+
+from sklearn import datasets
+from sklearn.naive_bayes import GaussianNB
+from collections import Counter
+
+iris = datasets.load_iris()
+
+#x = data
+#y = target
+
+#print(iris.data)
+
+#print(iris.target)
+
+#print(iris.target_names)
+'''This is getting the data and printing it out(names, targets, data)'''
+
+
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+x_train, x_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, train_size= 0.7)
+#print(x_train, y_train)
+#print(x_test, y_test)
+'''This is randomizing the 0,1,2 for our predictions'''
+
+classifier = GaussianNB()
+model = classifier.fit(x_train, y_train)
+
+'''we are training the algorithm and finding out how accurate it is to actual data'''
+targets_predicted = model.predict(x_test)
+#print(targets_predicted)
+
+#print(100 * accuracy_score(y_test,targets_predicted),"%")
+
+
+
+class HardCodedClassifier():
+    def fit(self, x_train, y_train):
+        self.x_train = x_train
+        self.y_train = y_train
+        return self
+
+    def predict(self, x_test):
+        return [0 for x in range(len(x_test))]
+
+classifier = HardCodedClassifier()
+model = classifier.fit(x_train, y_train)
+targets_predicted = model.predict(x_test)
+
+'''we now hardcode the training and find out how accurate that it, which is less accurate'''
+
+targets_predicted = model.predict(x_test)
+#print(targets_predicted)
+
+#print(100 * accuracy_score(y_test,targets_predicted),"%")
+
+#going above
+
+import pandas
+
+data = pandas.read_csv("/Users//berun/PycharmProjects/CS450/data/iris.csv")
+#print(data)
+
+#all_lines = data.readlines()
+
+'''for line in data:
+    flowers = line.split(",")
+    for flower in flowers:
+        if flower >= 0:
+            print(flower)'''
