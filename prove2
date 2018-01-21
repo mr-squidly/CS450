@@ -1,0 +1,123 @@
+#worked on this with mikaela
+
+from sklearn import datasets
+from sklearn.naive_bayes import GaussianNB
+from collections import Counter
+
+iris = datasets.load_iris()
+
+#x = data
+#y = target
+
+#print(iris.data)
+
+#print(iris.target)
+
+#print(iris.target_names)
+'''This is getting the data and printing it out(names, targets, data)'''
+
+
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+x_train, x_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, train_size= 0.7)
+#print(x_train, y_train)
+#print(x_test, y_test)
+'''This is randomizing the 0,1,2 for our predictions'''
+
+classifier = GaussianNB()
+model = classifier.fit(x_train, y_train)
+
+'''we are training the algorithm and finding out how accurate it is to actual data'''
+targets_predicted = model.predict(x_test)
+#print(targets_predicted)
+
+#print(100 * accuracy_score(y_test,targets_predicted),"%")
+
+
+
+class HardCodedClassifier():
+    def fit(self, x_train, y_train):
+        self.x_train = x_train
+        self.y_train = y_train
+        return self
+
+    def predict(self, x_test):
+        return [0 for x in range(len(x_test))]
+
+classifier = HardCodedClassifier()
+model = classifier.fit(x_train, y_train)
+targets_predicted = model.predict(x_test)
+
+'''we now hardcode the training and find out how accurate that it, which is less accurate'''
+
+targets_predicted = model.predict(x_test)
+#print(targets_predicted)
+
+#print(100 * accuracy_score(y_test,targets_predicted),"%")
+
+#going above
+
+import pandas
+
+data = pandas.read_csv("/Users//berun/PycharmProjects/CS450/data/iris.csv")
+#print(data)
+
+#all_lines = data.readlines()
+
+'''for line in data:
+    flowers = line.split(",")
+    for flower in flowers:
+        if flower >= 0:
+            print(flower)'''
+
+#prove 02
+import numpy as np
+
+def train(x_train,y_train):
+    pass
+
+def predict(x_train, y_train, x_test, k):
+    distance = []
+    targets = []
+
+    for i in range(len(x_train)):
+        euclidean_dist = np.sqrt(np.sum(np.square(x_test - x_train[i, :])))
+        distance.append([euclidean_dist, i])
+
+    sorted_dist = sorted(distance)
+    #print(sorted_dist)
+
+    for i in range(k):
+        index = sorted_dist[i][1]
+        targets.append(y_train[index])
+
+    #print(index)
+
+    #print(Counter(targets).most_common(1)[0][0])
+    return Counter(targets).most_common(1)[0][0]
+
+def K_nearest_neighbor(x_train,y_train,x_test, predictions,k):
+    train(x_train,y_train)
+
+    for i in range(len(x_test)):
+        predictions.append(predict(x_train,y_train,x_test[i, :], k=5))
+
+predictions = []
+
+K_nearest_neighbor(x_train,y_train,x_test,predictions,k=5)
+
+accuracy = accuracy_score(y_test, predictions)
+print("Our prediction accuracy: {}%".format(100*accuracy))
+
+from sklearn.neighbors import KNeighborsClassifier
+
+x_train, x_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, train_size= 0.7)
+
+
+classifier = KNeighborsClassifier(n_neighbors=5)
+model = classifier.fit(x_train, y_train)
+k_predictions = model.predict(x_test)
+
+k_accuracy = accuracy_score(y_test, k_predictions)
+print("Algorithm prediction accuracy: {}%".format(100*k_accuracy))
