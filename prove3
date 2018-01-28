@@ -1,0 +1,508 @@
+
+#worked on this with mikaela and dan
+
+import pandas
+import numpy as np
+from sklearn import datasets
+from sklearn.naive_bayes import GaussianNB
+from collections import Counter
+from sklearn.model_selection import KFold
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import cross_val_score
+
+'''
+iris = datasets.load_iris()
+
+#x = data
+#y = target
+
+#print(iris.data)
+
+#print(iris.target)
+
+#print(iris.target_names)
+#This is getting the data and printing it out(names, targets, data)
+
+
+from sklearn.model_selection import train_test_split
+
+
+x_train, x_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, train_size= 0.7)
+#print(x_train, y_train)
+#print(x_test, y_test)
+#This is randomizing the 0,1,2 for our predictions
+
+classifier = GaussianNB()
+model = classifier.fit(x_train, y_train)
+
+#we are training the algorithm and finding out how accurate it is to actual data
+targets_predicted = model.predict(x_test)
+#print(targets_predicted)
+
+#print(100 * accuracy_score(y_test,targets_predicted),"%")
+
+
+
+class HardCodedClassifier():
+    def fit(self, x_train, y_train):
+        self.x_train = x_train
+        self.y_train = y_train
+        return self
+
+    def predict(self, x_test):
+        return [0 for x in range(len(x_test))]
+
+classifier = HardCodedClassifier()
+model = classifier.fit(x_train, y_train)
+targets_predicted = model.predict(x_test)
+
+#we now hardcode the training and find out how accurate that it, which is less accurate
+
+targets_predicted = model.predict(x_test)
+#print(targets_predicted)
+
+#print(100 * accuracy_score(y_test,targets_predicted),"%")
+
+#going above
+
+import pandas
+
+data = pandas.read_csv("/Users//berun/PycharmProjects/CS450/data/iris.csv")
+#print(data)
+
+#all_lines = data.readlines()
+
+#for line in data:
+#    flowers = line.split(",")
+#    for flower in flowers:
+#        if flower >= 0:
+#            print(flower)
+
+#prove 02
+import numpy as np
+
+def train(x_train,y_train):
+    pass
+
+def predict(x_train, y_train, x_test, k):
+    distance = []
+    targets = []
+
+    for i in range(len(x_train)):
+        euclidean_dist = np.sqrt(np.sum(np.square(x_test - x_train[i, :])))
+        distance.append([euclidean_dist, i])
+
+    sorted_dist = sorted(distance)
+    #print(sorted_dist)
+
+    for i in range(k):
+        index = sorted_dist[i][1]
+        targets.append(y_train[index])
+
+    #print(index)
+
+    #print(Counter(targets).most_common(1)[0][0])
+    return Counter(targets).most_common(1)[0][0]
+
+def K_nearest_neighbor(x_train,y_train,x_test, predictions,k):
+    train(x_train,y_train)
+
+    for i in range(len(x_test)):
+        predictions.append(predict(x_train,y_train,x_test[i, :], k=20))
+
+predictions = []
+
+K_nearest_neighbor(x_train,y_train,x_test,predictions,k=20)
+
+accuracy = accuracy_score(y_test, predictions)
+print("Our prediction accuracy: {}%".format(100*accuracy))
+
+from sklearn.neighbors import KNeighborsClassifier
+
+x_train, x_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, train_size= 0.7)
+
+
+classifier = KNeighborsClassifier(n_neighbors=20)
+model = classifier.fit(x_train, y_train)
+k_predictions = model.predict(x_test)
+
+k_accuracy = accuracy_score(y_test, k_predictions)
+print("Algorithm prediction accuracy: {}%".format(100*k_accuracy))
+'''
+
+
+#prove3
+
+
+iris = datasets.load_iris()
+
+import numpy as np
+from collections import Counter
+from sklearn.naive_bayes import GaussianNB
+from sklearn import datasets
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import KFold
+
+
+
+#car data
+
+import pandas
+import numpy as np
+
+car_data = pandas.read_csv("/Users/darrenfox/PycharmProjects/arcade/data/data_for_CS450/cardata.csv", header=None)
+
+car_data.columns = ['buying', 'maint', 'doors', 'persons', 'lug_boot', 'safety', 'class']
+
+
+#print(car_data)
+
+
+cleanup_nums = {'buying': {'vhigh': 4, 'high': 3, 'med': 2, 'low': 1},
+                 'maint': {'vhigh': 4, 'high': 3, 'med': 2, 'low': 1},
+                  'doors': {'5more': 5, '2':2, '3':3, '4': 4},
+                   'persons': {'more': 6, '2':2, '4': 4},
+                    'lug_boot': {'small': 1, 'med': 2, 'big': 3},
+                      'safety': {'low': 1, 'med': 2, 'high': 3},
+                       'class': {'unacc': 1, 'acc': 2, 'good': 3, 'vgood': 4}}
+car_data.replace(cleanup_nums, inplace=True)
+#print(car_data.dtypes)
+
+
+def train(x_train, y_train):
+    return
+
+def predict(x_train, y_train, x_test, k):
+    #creating list for distances and targets
+
+    distances = []
+    targets = []
+
+    for i in range(len(x_train)):
+        #computing the euclidean distance using numpy. comparing each x_test data point to each x_train data point
+        e_distance = np.sqrt(np.sum(np.square(x_test - x_train[i, :])))
+        #add to list of distances now
+        distances.append([e_distance, i])
+
+    #sort the list to make it go from smallest distance to greatest distance
+    distances_sorted = sorted(distances)
+    #print(distances_sorted)
+    #make list of the k neighbours' targets. Takes top five (five smallest values) values and puts it into a list called 'targets'
+    for i in range(k):
+        index = distances_sorted[i][1]
+        targets.append(y_train[index])
+
+    #return most common target
+    return Counter(targets).most_common(1)[0][0]
+
+
+def K_Nearest_Neighbour(x_train, y_train, x_test, predictions, k):
+
+    #train on the input data
+    train(x_train, y_train)
+
+    for i in range(len(x_test)):
+        predictions.append(predict(x_train, y_train, x_test[i, :], k=5))
+
+#making predictions
+    predictions = []
+
+    K_Nearest_Neighbour(x_train, y_train, x_test, predictions, k=5)
+
+
+
+    accuracy = 100*accuracy_score(y_test, predictions)
+
+
+def cross_validation():
+    predictions = []
+    kf = KFold(n_splits = 3)
+    sum = 0
+    for train, test in kf.split(car_data):
+
+        train_data = np.array(car_data)[train]
+        x_train = np.array(train_data[:, 0:6])  # data
+        y_train = np.array(train_data[:,6])  # target
+
+        test_data = np.array(car_data)[train]
+        x_test = np.array(test_data[:, 0:6])
+        y_test = np.array(test_data[:,6])
+
+        classifier = K_Nearest_Neighbour(x_train, y_train, x_test, predictions, k=5)
+        sum += 100*accuracy_score(classifier.predictions, y_test)
+    average = sum/3
+    print(average)
+
+cross_validation()
+
+
+
+
+
+#This is the known algorithm
+from sklearn.neighbors import KNeighborsClassifier
+
+x_train, x_test, y_train, y_test = train_test_split(x_train, y_train, test_size=0.3)
+
+classifier = KNeighborsClassifier(n_neighbors=5)
+model = classifier.fit(x_train, y_train)
+predictions2 = model.predict(x_test)
+
+checking_accuracy = 100*accuracy_score(y_test, predictions2)
+print(checking_accuracy)
+
+
+
+#diabetes data
+
+diabetes = pandas.read_csv("/Users/darrenfox/PycharmProjects/arcade/data/data_for_CS450/pima-indians-diabetes.data.csv")
+diabetes.columns = ['Number of Times Pregnant', 'Plasma Glucose Conc', 'Diastolic Blood Pressure', 'Triceps Skin Thickness', '2-Hour Insulin Thickness', 'BMI', 'Diabetes Pedigree Function', 'Age(years)', 'Class variable (0 or 1)']
+
+
+
+#replace all zeros in columns for blood pressure, BMI, and conc for their averages up to that point(meaning, it will only use the data above that placement to get the average) since the zero right now represents and unknown value.
+
+cleanup_zeros = {'Diastolic Blood Pressure': {0: (diabetes['Diastolic Blood Pressure'].mean())},
+                 'BMI': {0: (diabetes['BMI'].mean())},
+                 'Plasma Glucose Conc': {0: (diabetes['Plasma Glucose Conc'].mean())}}
+diabetes.replace(cleanup_zeros, inplace = True)
+
+
+def train(x_train, y_train):
+    return
+
+def predict(x_train, y_train, x_test, k):
+    #creating list for distances and targets
+
+    distances = []
+    targets = []
+
+    for i in range(len(x_train)):
+        #computing the euclidean distance using numpy. comparing each x_test data point to each x_train data point
+        e_distance = np.sqrt(np.sum(np.square(x_test - x_train[i, :])))
+        #add to list of distances now
+        distances.append([e_distance, i])
+
+    #sort the list to make it go from smallest distance to greatest distance
+    distances_sorted = sorted(distances)
+    #print(distances_sorted)
+    #make list of the k neighbours' targets. Takes top five (five smallest values) values and puts it into a list called 'targets'
+    for i in range(k):
+        index = distances_sorted[i][1]
+        targets.append(y_train[index])
+
+    #return most common target
+    return Counter(targets).most_common(1)[0][0]
+
+
+def K_Nearest_Neighbour(x_train, y_train, x_test, predictions, k):
+
+    #train on the input data
+    train(x_train, y_train)
+
+    for i in range(len(x_test)):
+        predictions.append(predict(x_train, y_train, x_test[i, :], k=5))
+
+#making predictions
+    predictions = []
+
+    K_Nearest_Neighbour(x_train, y_train, x_test, predictions, k=5)
+
+
+
+    accuracy = 100*accuracy_score(y_test, predictions)
+
+
+def cross_validation():
+    predictions = []
+    kf = KFold(n_splits = 3)
+    sum = 0
+    for train, test in kf.split(car_data):
+
+        train_data = np.array(diabetes)[train]
+        x_train = np.array(train_data[:, 0:6])  # data
+        y_train = np.array(train_data[:,6])  # target
+
+        test_data = np.array(diabetes)[train]
+        x_test = np.array(test_data[:, 0:6])
+        y_test = np.array(test_data[:,6])
+
+        classifier = K_Nearest_Neighbour(x_train, y_train, x_test, predictions, k=5)
+        sum += 100*accuracy_score(classifier.predictions, y_test)
+    average = sum/3
+    print(average)
+
+cross_validation()
+
+
+
+
+
+#This is the known algorithm
+from sklearn.neighbors import KNeighborsClassifier
+
+x_train, x_test, y_train, y_test = train_test_split(x_train, y_train, test_size=0.3)
+
+classifier = KNeighborsClassifier(n_neighbors=5)
+model = classifier.fit(x_train, y_train)
+predictions2 = model.predict(x_test)
+
+checking_accuracy = 100*accuracy_score(y_test, predictions2)
+print(checking_accuracy)
+
+
+
+
+
+
+#data for automobiles
+
+
+automobiles = pandas.read_csv("/Users/darrenfox/PycharmProjects/arcade/data/data_for_CS450/automobile.csv")
+
+automobiles = automobiles.replace('?', np.nan)
+automobiles = automobiles.dropna()
+
+automobiles.columns = ['mpg', 'cylinders', 'displacement', 'horsepower', 'weight', 'acceleration', 'model year', 'origin', 'car name']
+
+def train(x_train, y_train):
+    return
+
+def predict(x_train, y_train, x_test, k):
+    #creating list for distances and targets
+
+    distances = []
+    targets = []
+
+    for i in range(len(x_train)):
+        #computing the euclidean distance using numpy. comparing each x_test data point to each x_train data point
+        e_distance = np.sqrt(np.sum(np.square(x_test - x_train[i, :])))
+        #add to list of distances now
+        distances.append([e_distance, i])
+
+    #sort the list to make it go from smallest distance to greatest distance
+    distances_sorted = sorted(distances)
+    #print(distances_sorted)
+    #make list of the k neighbours' targets. Takes top five (five smallest values) values and puts it into a list called 'targets'
+    for i in range(k):
+        index = distances_sorted[i][1]
+        targets.append(y_train[index])
+
+    #return most common target
+    return Counter(targets).most_common(1)[0][0]
+
+
+def K_Nearest_Neighbour(x_train, y_train, x_test, predictions, k):
+
+    #train on the input data
+    train(x_train, y_train)
+
+    for i in range(len(x_test)):
+        predictions.append(predict(x_train, y_train, x_test[i, :], k=5))
+
+#making predictions
+    predictions = []
+
+    K_Nearest_Neighbour(x_train, y_train, x_test, predictions, k=5)
+
+
+
+    accuracy = 100*accuracy_score(y_test, predictions)
+
+
+def cross_validation():
+    predictions = []
+    kf = KFold(n_splits = 3)
+    sum = 0
+    for train, test in kf.split(automobiles):
+
+        train_data = np.array(automobiles)[train]
+        x_train = np.array(train_data[:, 0:6])  # data
+        y_train = np.array(train_data[:,6])  # target
+
+        test_data = np.array(automobiles)[train]
+        x_test = np.array(test_data[:, 0:6])
+        y_test = np.array(test_data[:,6])
+
+        classifier = K_Nearest_Neighbour(x_train, y_train, x_test, predictions, k=5)
+        sum += 100*accuracy_score(classifier.predictions, y_test)
+    average = sum/3
+    print(average)
+
+cross_validation()
+
+
+
+
+
+#This is the known algorithm
+from sklearn.neighbors import KNeighborsClassifier
+
+x_train, x_test, y_train, y_test = train_test_split(x_train, y_train, test_size=0.3)
+
+classifier = KNeighborsClassifier(n_neighbors=5)
+model = classifier.fit(x_train, y_train)
+predictions2 = model.predict(x_test)
+
+checking_accuracy = 100*accuracy_score(y_test, predictions2)
+print(checking_accuracy)
+
+'''
+di_data = pandas.read_csv("/Users//berun/PycharmProjects/CS450/data/pima-indians-diabetes.csv")
+
+
+
+di_data.columns = [ 'Times Pregnant', 'Plasma glucose conc.', 'Diastolic blood pressure',
+                    'Triceps Skin Thickness', '2-Hour Insulin Thickness', 'BMI',
+                    'Diabetes Pedigree Function', 'Age', 'Class Variable']
+
+#plasma = di_data['Plasma glucose conc.'].mean()
+#blood_pressure = di_data['Diastolic blood pressure'].mean()
+#tricep = di_data['Triceps Skin Thickness'].mean()
+#insulin = di_data['2-Hour Insulin Thickness'].mean()
+#bmi = di_data['BMI'].mean()
+#pedigree = di_data['Diabetes Pedigree Function'].mean()
+#age = di_data['Age'].mean()
+#class = di_data['Class Variable'].mean()
+
+clean_data = { 'Plasma glucose conc.': {0: di_data['Plasma glucose conc.'].mean()},
+            'Diastolic blood pressure': {0:di_data['Diastolic blood pressure'].mean()},
+            'Triceps Skin Thickness': {0: di_data['Triceps Skin Thickness'].mean()},
+            '2-Hour Insulin Thickness': {0: di_data['2-Hour Insulin Thickness'].mean()},
+            'BMI': {0:di_data['BMI'].mean()},
+            'Diabetes Pedigree Function': {0: di_data['Diabetes Pedigree Function'].mean()},
+            'Age': {0: di_data['Age'].mean()}}
+
+
+di_data.replace(clean_data, inplace=True)
+
+#print(di_data.iloc[74])
+
+print(di_data)
+
+'''
+
+
+
+
+
+
+
+
+
+'''
+auto_data = pandas.read_csv("/Users//berun/PycharmProjects/CS450/data/auto-mpg_data.csv")
+
+auto_data = auto_data.replace('?',np.nan)
+auto_data = auto_data.dropna()
+
+
+auto_data.columns = ['mpg', 'cylinders', 'displacement', 'horsepower',
+                     'weight', 'acceleration', 'model year', 'origin', 'car name']
+
+print(auto_data.iloc[367])
+
+print(auto_data)
+'''
+
